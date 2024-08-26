@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+        overflow-x: hidden;
+        overscroll-behavior: none;
+      }
+
+      body.overflowHidden {
+        overflow: hidden;
+      }
+
+      #container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background-color: #eee;
+      }
+
+      .loader-box {
+        position: relative;
+        top: -80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #loader {
+        width: 25px;
+        height: 25px;
+        border: 3px solid #ddd;
+        border-radius: 50%;
+        border-bottom: 3px solid #717171;
+        transform: rotate(0deg);
+      }
+
+      #loader.loading {
+        animation: loading 1s linear infinite;
+      }
+
+      @keyframes loading {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      h1 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div class="loader-box">
+        <div id="loader"></div>
+      </div>
+      <h1>开始下拉刷新</h1>
+    </div>
+  </body>
+  <script src="./index.js"></script>
+</html>
