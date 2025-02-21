@@ -1,0 +1,90 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.tab-wrap {
+  width: 300px;
+  height: 50px;
+  margin: 100px;
+  display: flex;
+  border: 1px solid #000;
+  overflow: hidden;
+}
+
+.item {
+  flex: 1;
+  height: 50px;
+  position: relative;
+  transform: skew(20deg);
+  list-style: none;
+}
+
+.item span {
+  display: block;
+  transform: skew(-20deg);
+  height: 100%;
+  text-align: center;
+  line-height: 50px;
+}
+
+.item::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+}
+
+.item-odd {
+  background-color: #ccc;
+  border-radius: 0 15px 0 0;
+}
+
+.item-odd::before {
+  background: radial-gradient(
+    circle at 100% 0,
+    transparent,
+    transparent 20px,
+    #ccc 10px
+  );
+  bottom: 0;
+  right: -20px;
+}
+
+.item-odd::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 100%;
+  background-color: #ccc;
+  left: -10px;
+  top: 0;
+  transform: skew(-20deg);
+}
+
+.item-even {
+  background-color: #fff;
+  border-radius: 0 0 0 15px;
+}
+
+.item-even::before {
+  background: radial-gradient(
+    circle at 0 100%,
+    transparent,
+    transparent 20px,
+    #fff 20px
+  );
+  top: 0;
+  left: -20px;
+}
+.item-even::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 100%;
+  background-color: #fff;
+  right: -10px;
+  top: 0;
+  transform: skew(-20deg);
+}
