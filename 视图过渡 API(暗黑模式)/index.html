@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="referrer" content="no-referrer" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"
+    />
+    <title>视图过渡 API</title>
+    <style>
+      html,
+      body,
+      .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background-color: #fff;
+      }
+
+      iframe {
+        flex: 1;
+        width: 100%;
+        background-color: #fff;
+        transition: all 300ms;
+      }
+
+      html.dark {
+        filter: invert(1) hue-rotate(180deg);
+
+        img,
+        video,
+        .avatar,
+        .image,
+        .thumb {
+          filter: invert(1) hue-rotate(180deg);
+        }
+      }
+
+      button {
+        width: 100px;
+        height: 30px;
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-bottom: 5px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      button:active {
+        background-color: #e0e0e0;
+      }
+
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation: none;
+        mix-blend-mode: normal;
+      }
+
+      ::view-transition-old(root) {
+        z-index: 1;
+      }
+
+      ::view-transition-new(root) {
+        z-index: 2147483646;
+      }
+
+      html.dark::view-transition-old(root) {
+        z-index: 2147483646;
+      }
+
+      html.dark::view-transition-new(root) {
+        z-index: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div>
+        <button id="btn">切换主题</button>
+      </div>
+      <iframe src="https://juejin.cn/post/7490602578011570202"></iframe>
+    </div>
+    <script>
+      document
+        .getElementById("btn")
+        .addEventListener("click", function (event) {
+          toggleTheme(event);
+        });
+
+      // 切换主题
+      function toggleTheme(event) {
+        // 检查浏览器是否支持 View Transition API
+        if (!document.startViewTransition) {
+          // 不支持则直接切换主题，不添加动画
+          document.documentElement.classList.toggle("dark");
+          return;
+        }
+        const transition = document.startViewTransition(() => {
+          document.documentElement.classList.toggle("dark");
+        });
+
+        transition.ready.then(() => {
+          const { clientX, clientY } = event;
+
+          const endRadius = Math.hypot(
+            Math.max(clientX, innerWidth - clientX),
+            Math.max(clientY, innerHeight - clientY)
+          );
+
+          const clipPath = [
+            `circle(0px at ${clientX}px ${clientY}px)`,
+            `circle(${endRadius}px at ${clientX}px ${clientY}px)`,
+          ];
+
+          const isDark = document.documentElement.classList.contains("dark");
+
+          document.documentElement.animate(
+            {
+              clipPath: isDark ? clipPath.reverse() : clipPath,
+            },
+            {
+              duration: 450,
+              easing: "ease-in",
+              pseudoElement: isDark
+                ? "::view-transition-old(root)"
+                : "::view-transition-new(root)",
+            }
+          );
+        });
+      }
+    </script>
+  </body>
+</html>
